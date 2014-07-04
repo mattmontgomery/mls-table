@@ -1,0 +1,7 @@
+{
+    "name": "mls-table",
+    "dependencies": {
+        "jquery": "~2",
+        "bootstrap": "~3"
+    }
+}

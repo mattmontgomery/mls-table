@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1 At the brink of: #{title}
+  p Welcome to #{title}
+  table.pointsByWeek.table
+    tr
+        th
+        -for(var x = 1; x <= 34; x++)
+            th #{x}
+    each team in teams
+        tr
+            td.teamName.ta= team.name
+            each week in team.pointsByWeek
+                td.week= week

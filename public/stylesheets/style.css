@@ -1,0 +1,10 @@
+@import url("/vendor/bootstrap/dist/css/bootstrap.min.css");
+a {
+  color: #00B7FF;
+}
+table.pointsByWeek td.teamName {
+    padding-right: 1em;
+}
+table.pointsByWeek td.week {
+    width: 2.5em;
+}

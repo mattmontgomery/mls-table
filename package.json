@@ -27,6 +27,10 @@
         "debug": "~0.7.4",
         "jade": "~1.3.0",
         "cheerio": "~0",
-        "request": "~2"
+        "request": "~2",
+        "redis": "~0.10",
+        "bluebird": "",
+        "request-promise": "",
+        "lodash": ""
     }
 }

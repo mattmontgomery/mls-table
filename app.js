@@ -6,8 +6,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var slug = require('slug');
+var redis = require('redis');
+var Promise = require('bluebird');
 
 var routes = require('./routes');
+
+// a small library to request-and-redis data
+var scrape = require('./scrape.js');
 
 var app = express();
 
@@ -25,19 +30,17 @@ app.use(app.router);
 
 app.get('/', routes.index);
 app.get('/table', function(req, res) {
-    var cheerio = require('cheerio'),
-        request = require('request'),
-        url = "http://www.mlssoccer.com/results",
-        pointsMap = {
-            'win': 3,
-            'draw': 1,
-            'loss': 0,
-            'notplayed': 0
-        };
-        teams = {};
-    request(url, function(err,resp,body) {
-        $ = cheerio.load(body);
-        var week;
+    var s = new scrape({url: 'http://www.mlssoccer.com/results', dataName: "results"});
+    s.process(function(self) {
+        var week,
+            pointsMap = {
+                'win': 3,
+                'draw': 1,
+                'loss': 0,
+                'notplayed': 0
+            },
+            teams = {};
+        $ = self.$;
         $('.stats-table .game-record tr').each(function(){
             week = 0;
             team = {
@@ -64,7 +67,9 @@ app.get('/table', function(req, res) {
             })
             teams[slug(team.name)] = team;
         });
-        res.render('table', { title: 'Express', teams: teams });
+        return teams;
+    }).then(function(s){
+        res.render('table', { title: 'Teams by week', teams: s.data });
     });
 });
 
